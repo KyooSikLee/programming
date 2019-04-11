@@ -1,17 +1,25 @@
+cache = {}
+def calculate(adj, D, W):
+	if W in cache.keys():
+		return cache[W]
+	if W not in adj.keys():
+		cache[W] = D[W-1]
+		return D[W-1]
+	else:
+		cache[W] = D[W-1] + max(map(lambda x: calculate(adj, D, x), adj[W]))
+	return cache[W]
+
 T = int(input())
 for i in range(T):
-	cache = {}
-	NK = list(map(int,input().split()))
-	N = NK[0]
-	K = NK[1]
+	adj = {}
+	N, K = list(map(int,input().split()))
 	D = list(map(int,input().split()))
 	for j in range(K):
-		XY = input().split(" ")
-		X = int(XY[0])
-		Y = int(XY[1])
-		if X in cache.keys():
-			cache[X].append(Y)
+		X, Y = list(map(int,input().split()))
+		if Y in adj.keys():
+			adj[Y].append(X)
 		else:
-			cache[X] = [Y]
+			adj[Y] = [X]
 	W = int(input())
-	
+	cache = {1: D[0]}
+	print(calculate(adj, D, W))
